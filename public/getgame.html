@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Plantilla</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Daze Game</h1>
+        <h1>Busca una partida por su ID</h1>
+        <input type="text" id="idgame" value="">
+        <button onclick="isserching()">Serch</button>
+        <h2 id="idGameh2"></h2>
+        <ul id="orderGamers"></ul>
+        <h2 id="progress"></h2>
+        <h2 id="winner"></h2>
+    </div>
+    <script>
+        function isserching(){
+            console.log('entrando a la funcion')
+            const idGame = document.getElementById('idgame').value
+            fetch(`http://localhost:8080/game/${idGame}`)
+                .then(resp => resp.json())
+                .then(data => {
+                    let idGameH2 = document.getElementById('idGameh2')
+                    idGameH2.innerHTML = `Este es el id de la ronda del juego: ${data.id}`
+                    let orderGamers = document.getElementById('orderGamers')
+                    const playersId = Object.keys(data.gamers)
+                    let orderGameHtml = ""
+                    data.gamers.map((gamer) => {
+                       let gamerKeys = Object.keys(gamer)
+                       let gamerUserId = gamerKeys[0]
+                       let gamerName = gamer[gamerKeys[0]].name
+                       orderGameHtml += `<li> ${gamerUserId}: ${gamerName} </li>`
+                    })
+                    orderGamers.innerHTML = orderGameHtml
+                    let isProgress = document.getElementById('progress')
+                    isProgress.innerHTML = ` in Progess:  ${data.inProgress}`
+                    let winnerdata = document.getElementById('winner')
+                    winnerdata.innerHTML = `id: ${data.winner.id} , name: ${data.winner.name}`
+                })
+        }
+    </script>
+</body>
+</html>
