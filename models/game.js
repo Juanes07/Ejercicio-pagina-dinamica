@@ -36,7 +36,7 @@ async function getById (id) {
     return gamerToReturn
   })
   infoReturn.inProgress = data.inProgress
-  const numberRandom = parseInt(Math.random() * (4 - 1) + 1)
+  // const numberRandom = parseInt(Math.random() * (4 - 1) + 1)
   infoReturn.winner = {
     id: gamers[0].id,
     name: gamers[0].name
@@ -57,7 +57,8 @@ function startGame (id, gamerBet) {
   return Game.findByIdAndUpdate(id, { gamers: gamerBets })
 }
 
-async function getWinner (id, name) {
+async function getWinner (id) {
+  console.log('id', id)
   const data = await Game.findById(id)
   const gamers = data.gamers.sort((a, b) => b.score - a.score)
   const infoReturn = {

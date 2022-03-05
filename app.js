@@ -11,13 +11,12 @@ const GameModel = require('./models/game')
 // motor de plantillas
 app.use(express.json())
 app.use((express.static(path.join(__dirname, '/public'))))
-// app.engine('html', engines.mustache)
-// app.set('view engine', 'pug')
 app.use(express.urlencoded({ extended: true }))
 
 /**
  * conexion a base de datos
  */
+
 const mongodb = 'mongodb://localhost/ejercicioformulario'
 mongoose.connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected'))
@@ -39,7 +38,6 @@ app.get('/', async (req, res) => {
   }
 })
 
-// para acceder a la pagina dinamica, se debe ingresar la direcion localhost:8080/getgame.html
 app.get('/getgame', async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
@@ -61,8 +59,9 @@ app.get('/getgame', async (req, res, next) => {
 app.post('/creategame', async (req, res) => {
   try {
     const body = req.body
-    const gameCreated = await GameModel.create(body)
-    res.status(200).json(gameCreated)
+    await GameModel.create(body)
+    res.redirect('/getgame.html')
+    // res.status(200).json(gameCreated)
   } catch (err) {
     res.status(500).json({ message: err })
   }
@@ -81,7 +80,6 @@ app.get('/game/:id/winner', async (req, res) => {
   try {
     const bodyBet = req.body
     const win = await GameModel.getWinner(bodyBet.id, bodyBet.name)
-    console.log(win)
     res.status(200).json(win)
   } catch (error) {
     res.status(500).json({ message: error })
@@ -92,8 +90,8 @@ app.post('/startGame', async (req, res) => {
   try {
     const bodyBet = req.body
     const resultGame = await GameModel.startGame(bodyBet.id, bodyBet.gamerBet)
-    res.status(200).json(resultGame)
     console.log(resultGame)
+    res.status(200).json(resultGame)
   } catch (error) {
     res.status(500).json({ message: error })
   }
