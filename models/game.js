@@ -3,6 +3,7 @@
  */
 const mongoose = require('mongoose')
 const Game = require('../schema/gameSchema')
+
 /**
  *
  * @version [1.0.000, 2022-03-03]
@@ -12,6 +13,13 @@ const Game = require('../schema/gameSchema')
  * @since [1.0.000 2022-03-03]
  *
  */
+
+/**
+ * Funcion crear Juego
+ * @param  game datos agregados por formulario
+ * @returns juego guardado en mongodb
+ */
+
 function create (game) {
   game.gamers = game.gamers.map((gamer) => {
     return {
@@ -21,7 +29,11 @@ function create (game) {
   const newGame = new Game(game)
   return newGame.save()
 }
-
+/**
+ * funcion para obtener Id de la partida (automatico por mongodb)
+ * @param id numero de id de cada partida
+ * @returns gamerToReturn informacion de la partida creada. infoReturn informacion sobre el ganador
+ */
 async function getById (id) {
   const infoReturn = {}
   const data = await Game.findById(id)
@@ -36,13 +48,19 @@ async function getById (id) {
     return gamerToReturn
   })
   infoReturn.inProgress = data.inProgress
-  // const numberRandom = parseInt(Math.random() * (4 - 1) + 1)
   infoReturn.winner = {
     id: gamers[0].id,
     name: gamers[0].name
   }
   return infoReturn
 }
+
+/**
+ * funcion comenzar juego
+ * @param  id numero id de la partida creada
+ * @param  gamerBet arreglo donde se agregan los jugadores/score
+ * @returns un arreglo con los id de los jugadores con su score agregado
+ */
 
 function startGame (id, gamerBet) {
   const gamerBets = []
@@ -57,8 +75,13 @@ function startGame (id, gamerBet) {
   return Game.findByIdAndUpdate(id, { gamers: gamerBets })
 }
 
+/**
+ * funcion para traer al ganador de la partida
+ * @param id numero id de la partida creada
+ * @returns infoReturn id de cada jugador con su nombre
+ */
+
 async function getWinner (id) {
-  console.log('id', id)
   const data = await Game.findById(id)
   const gamers = data.gamers.sort((a, b) => b.score - a.score)
   const infoReturn = {

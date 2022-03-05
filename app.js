@@ -61,7 +61,6 @@ app.post('/creategame', async (req, res) => {
     const body = req.body
     await GameModel.create(body)
     res.redirect('/getgame.html')
-    // res.status(200).json(gameCreated)
   } catch (err) {
     res.status(500).json({ message: err })
   }
@@ -90,7 +89,6 @@ app.post('/startGame', async (req, res) => {
   try {
     const bodyBet = req.body
     const resultGame = await GameModel.startGame(bodyBet.id, bodyBet.gamerBet)
-    console.log(resultGame)
     res.status(200).json(resultGame)
   } catch (error) {
     res.status(500).json({ message: error })

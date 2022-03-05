@@ -11,12 +11,14 @@
     <div class="container">
         <h1>Daze Game</h1>
         <h1>Busca una partida por su ID</h1>
+        <h1>(El id de la partida, esta en la base de datos)</h1>
         <input type="text" id="idgame" value="">
         <button onclick="isserching()">Search</button>
         <h2 id="idGameh2"></h2>
         <ul id="orderGamers"></ul>
         <h2 id="progress"></h2>
         <h2 id="winner"></h2>
+        <h2 id="score"></h2>
     </div>
     <script>
         function isserching(){
@@ -40,7 +42,7 @@
                     let isProgress = document.getElementById('progress')
                     isProgress.innerHTML = ` in Progess:  ${data.inProgress}`
                     let winnerdata = document.getElementById('winner')
-                    winnerdata.innerHTML = `id: ${data.winner.id} , name: ${data.winner.name}`
+                    winnerdata.innerHTML = ` Ganador: <br> id: ${data.winner.id} , name: ${data.winner.name}`
                 })
         }
     </script>
